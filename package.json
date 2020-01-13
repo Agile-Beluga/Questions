@@ -1,0 +1,31 @@
+{
+  "name": "kartify-api-questions",
+  "version": "1.0.0",
+  "description": "Questions API for Kartify app",
+  "main": "server/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/index.js",
+    "start-dev": "nodemon server/index.js",
+    "schema": "node db/schema.sql",
+    "import-data": "node ETL/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Agile-Beluga/Kartify-API-Questions.git"
+  },
+  "author": "Sebastian Coronel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Agile-Beluga/Kartify-API-Questions/issues"
+  },
+  "homepage": "https://github.com/Agile-Beluga/Kartify-API-Questions#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "csv-parser": "^2.3.2",
+    "express": "^4.17.1",
+    "morgan": "^1.9.1",
+    "nodemon": "^2.0.2",
+    "pg": "^7.17.0"
+  }
+}
