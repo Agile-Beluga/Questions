@@ -25,9 +25,9 @@ httpServer.listen(port, (e) => {
 // Shutdown
 const shutdownGracefully = () => {
   console.log('Starting shutdown...');
-  // db.end()
-  // .then(() => console.log('PostgreSQL pool disconnected'))
-  // .catch(e => console.error('Error while disconnecting pool'))
+  db.end()
+  .then(() => console.log('PostgreSQL pool disconnected'))
+  .catch(e => console.error('Error while disconnecting pool'))
   httpServer.close(() => console.log('Server shut down'));
 };
 

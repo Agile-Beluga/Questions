@@ -27,33 +27,39 @@ const db = require('../../db/index.js');
 
 module.exports = {
   questions: {
-    findAllPool: (productId) => {
-      // return db.connect()
-      //   .then(client => client.query(`
-      //   SELECT question_id, question_body, question_date, asker_name, question_helpfulness, reported
-      //   FROM questions 
-      //   WHERE (product_id = ${productId} AND reported = 0)
-      //   `));
-      // const text = '';
-      // const values = '';
-      
-      // db.connect()
-      // .then(client => client.query(text, values))
-      // .then(res => {
-      //   client.release();
-      //   cb(null, res);
-      // })
-      // .catch(err => {
-      //   client.release();
-      //   cb(null, res);
-      // })
-    },
-    findAll: (productId) => {
-      return db.query(`
-        SELECT question_id, question_body, question_date, asker_name, question_helpfulness, reported
-        FROM questions 
-        WHERE (product_id = ${productId} AND reported = 0)
-      `);
+    findAll: (productId, count, page) => {
+      return db.connect()
+      .then(client => {
+        return client.query(`
+          SELECT question_id, question_body, question_date, asker_name, question_helpfulness, reported,
+          (
+            SELECT COALESCE(array_to_json(array_agg(row_to_json(a))), '[]')
+            FROM (
+              SELECT id, body, date, answerer_name, helpfulness, (
+                SELECT ARRAY(
+                  SELECT url
+                  FROM answers_photos
+                  WHERE answers.id = answers_photos.answer_id
+                )) as photos
+              FROM answers
+              WHERE answers.question_id=questions.question_id
+            ) a
+          ) as answers
+          FROM questions
+          WHERE (product_id = ${productId} AND reported = 0)
+          ORDER BY question_id ASC
+          LIMIT ${count}
+          OFFSET ${count * page}
+        `)
+        .then(({rows}) => {
+          client.release();
+          return rows;
+        })
+        .catch(e => {
+          client.release();
+          console.error(e);
+        })
+      });
     },
     add: (productId, question) => {
       const columns = 'product_id, asker_name, asker_email, question_body';
@@ -75,7 +81,10 @@ module.exports = {
         db.connect()
         .then(client => {
           client.query(query, values)
-          .then(() => client.release())
+          .then(({rows}) => {
+            client.release()
+            return rows;
+          })
         }));
       ;
     },
@@ -97,16 +106,23 @@ module.exports = {
 
   answers: {
     findAll: (questionId) => {
-      return db.query(`
+      return db.connect()
+      .then(client => {
+        client.query(`
         SELECT id, body, date, answerer_name, helpfulness 
         FROM answers 
-        WHERE question_id = ${questionId}
-      `);
+        WHERE question_id = ${questionId}`)
+        .then(() => client.release())
+      });
     },
     findAnswerPhotos: (answerId) => {
       const text = 'SELECT url FROM answers_photos WHERE answer_id = $1';
       const values = [answerId];
-      return db.query(text, values);
+      return db.connect()
+      .then(client => {
+        client.query(text, values)
+        .then(client.release())
+      })
     },
     add: (questionId, answer) => {
       const columns = 'question_id, answerer_name, answerer_email, body';

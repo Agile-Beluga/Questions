@@ -5,73 +5,21 @@ module.exports = {
     get: (req, res) => {
       const id = req.params.product_id;
       const count = req.query.count ? Math.floor(req.query.count) : 5;
-      const page = req.query.page ? Math.floor(req.query.page) : 1;
+      const page = req.query.page ? Math.floor(req.query.page) : 0;
       const response = {
         product_id: id,
         results: []
       };
-
-      models.questions.findAll(id)
-      .then(({rows:questions}) => {
-
-        if (questions.length === 0) {
-          res.json(response);
+      models.questions.findAll(id, count, page * count)
+      .then(questions => {
+        if (questions) {
+        response.results = questions;
         }
-         
-        const start = count * (page - 1);
-        const end = start + count > questions.length ? questions.length : start + count;
-        const totalQuestions = end - start;
-        
-        if (totalQuestions <= 0 || start < 0) {
-          res.json(response);
-        }
-        
-        let questionsDone = 0;
-        let totalAnswers = 0;
-        let answersDone = 0;
-
-        for (let i = start; i < end; i++) {
-          let question = questions[i];
-          question.answers = {};
-          response.results.push(question);
-
-          models.answers.findAll(question.question_id)
-          .then(({rows:answers}) => {
-            questionsDone += 1;
-            totalAnswers += answers.length; 
-
-            if (questionsDone === totalQuestions && totalAnswers === 0) {
-              res.json(response);
-            }
-
-            for (let answer of answers) {
-              question.answers[answer.id] = answer;
-              question.answers[answer.id].photos = [];
-              models.answers.findAnswerPhotos(answer.id)
-              .then(({rows:photos}) => {
-                answersDone += 1;
-                for (let photo of photos) {
-                  answer.photos.push(photo.url);
-                }
-                if (answersDone === totalAnswers && questionsDone === totalQuestions) {
-                  res.json(response);
-                } 
-              })
-              .catch(e => {
-                console.error(e);
-                res.sendStatus(404);
-              })
-            }
-          })
-          .catch(e => {
-            console.error(e);
-            res.sendStatus(404);
-          })
-        }
+        res.json(response);
       })
       .catch(e => {
-        console.error(e);
         res.sendStatus(404);
+        console.error(e);
       })
     },
     post: (req, res) => {
