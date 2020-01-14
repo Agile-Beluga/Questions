@@ -12,34 +12,19 @@ module.exports = {
       };
       models.questions.findAll(id, count, page * count)
       .then(questions => {
-        if (questions) {
-        response.results = questions;
-        }
-        res.json(response);
+        if (questions) response.results = questions;
+        res.send(response);
       })
       .catch(e => {
         res.sendStatus(404);
         console.error(e);
-      })
+      });
     },
     post: (req, res) => {
       const id = req.params['product_id'];
       const question = req.body;
 
       models.questions.add(id, question)
-      .then(() => {
-        res.sendStatus(201);
-      })
-      .catch(e =>{
-        res.sendStatus(500);
-        console.error(e);
-      });
-    },
-    postTest: (req, res) => {
-      const id = req.params['product_id'];
-      const question = req.body;
-
-      models.questions.addTest(id, question)
       .then(() => {
         res.sendStatus(201);
       })
@@ -74,31 +59,16 @@ module.exports = {
     get: (req, res) => {
       const id = req.params.question_id;
       const count = req.query.count ? Math.floor(req.query.count) : 5;
-      const page = req.query.page ? Math.floor(req.query.page) : 1;
-
+      const page = req.query.page ? Math.floor(req.query.page) : 0;
       const response = {
         question: id,
         page: page,
         count: count,
         results: []
       };
-
-      models.answers.findAll(id)
-      .then(({rows:answers}) => {
-        const start = count * (page - 1);
-        const end = start + count > answers.length ? answers.length : start + count;
-
-        if (answers.length === 0 || start < 0) {
-          res.json(response);
-        }
-
-        for (let i = start; i < end; i++) {
-          let answer = answers[i];
-          answer.answer_id = answer.id;
-          answer.photos = [];
-          delete answer.id;
-          response.results.push(answer);
-        }
+      models.answers.findAll(id, count, page)
+      .then(answers => {
+        if (answers) response.results = answers;
         res.json(response);
       })
       .catch(e => {
@@ -114,8 +84,8 @@ module.exports = {
       .then(({rows}) => models.answers.addPhotos(rows[0].id, answer.photos))
       .then(() => res.sendStatus(201))
       .catch(e => {
-        res.sendStatus(500)
-        console.error(e)
+        res.sendStatus(500);
+        console.error(e);
       });
     },
     putHelpful: (req, res) => {

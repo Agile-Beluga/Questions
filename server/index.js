@@ -7,7 +7,7 @@ const router = require('./routes/routes.js');
 const app = express();
 
 // Middleware
-app.use(morgan('tiny'));
+app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use('/', router);
 
