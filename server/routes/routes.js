@@ -3,7 +3,7 @@ const controllers = require('../controllers/index.js');
 
 // QUESTIONS:
 // Get all questions
-router.get('/qa/:product_id', controllers.questions.get);
+router.get('/qa/:product_id', controllers.questions.get2);
 // Add a question
 router.post('/qa/:product_id', controllers.questions.post);
 // Mark a question as helpful
@@ -23,7 +23,7 @@ router.put('/qa/answer/:answer_id/report', controllers.answers.putReport);
 
 // TEST
 router.get('/loaderio-27727094b7ac3dbc9fc77923a20f52ac/', (req, res) => {
-  res.send('loaderio-27727094b7ac3dbc9fc77923a20f52ac')
+  res.send('loaderio-27727094b7ac3dbc9fc77923a20f52ac');
 });
 
 module.exports = router;

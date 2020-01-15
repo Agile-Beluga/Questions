@@ -1,7 +1,40 @@
 const models = require('../models/index.js');
+const cache = require('../../cache/commands.js');
 
 module.exports = {
   questions: {
+    get2: (req, res) => {
+      const cacheKey = req.url;
+      const id = req.params.product_id;
+      const count = req.query.count ? Math.floor(req.query.count) : 5;
+      const page = req.query.page ? Math.floor(req.query.page) : 0;
+      const response = {
+        product_id: id,
+        results: []
+      };
+
+      cache.get(cacheKey)
+      .then(data => {
+        if (data === null) {
+          models.questions.findAll(id, count, page * count)
+          .then(questions => {
+            if (questions) response.results = questions;
+            res.json(response);
+            cache.set(cacheKey, JSON.stringify(response));
+          })
+          .catch(e => {
+            res.sendStatus(404);
+            console.error(e);
+          });
+        } else {
+          res.json(JSON.parse(data));
+        }
+      })
+      .catch(e => {
+        res.sendStatus(500);
+        console.error(e);
+      });
+    },
     get: (req, res) => {
       const id = req.params.product_id;
       const count = req.query.count ? Math.floor(req.query.count) : 5;

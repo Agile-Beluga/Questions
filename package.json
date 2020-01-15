@@ -21,11 +21,13 @@
   },
   "homepage": "https://github.com/Agile-Beluga/Kartify-API-Questions#readme",
   "dependencies": {
+    "bluebird": "^3.7.2",
     "body-parser": "^1.19.0",
     "csv-parser": "^2.3.2",
     "express": "^4.17.1",
     "morgan": "^1.9.1",
     "nodemon": "^2.0.2",
-    "pg": "^7.17.0"
+    "pg": "^7.17.0",
+    "redis": "^2.8.0"
   }
 }

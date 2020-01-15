@@ -8,4 +8,6 @@ const pool = new Pool ({
   port: process.env.PGPORT || 5432
 });
 
+pool.on('error', e => console.error(e));
+
 module.exports = pool;
