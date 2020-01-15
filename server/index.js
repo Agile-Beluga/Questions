@@ -37,5 +37,5 @@ const shutdownGracefully = () => {
   httpServer.close(() => console.log('Server shut down'));
 };
 
-process.on('SIGTERM', shutdownGracefully);
 process.on('SIGINT', shutdownGracefully);
+process.on('SIGTERM', shutdownGracefully);
