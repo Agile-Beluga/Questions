@@ -2,6 +2,24 @@ const db = require('../../db/index.js');
 
 module.exports = {
   questions: {
+    findAll1: (productId) => {
+      return db.connect()
+      .then(client => {
+        return client.query(`
+        SELECT question_id, question_body, question_date, asker_name, question_helpfulness, reported
+        FROM questions 
+        WHERE (product_id = ${productId} AND reported = 0)
+        `)
+        .then(({rows}) => {
+          client.release();
+          return rows;
+        })
+        .catch(e => {
+          client.release();
+          console.error(e);
+        })
+      })
+    },
     findAll: (productId, count, page) => {
       return db.connect()
       .then(client => {
@@ -90,6 +108,42 @@ module.exports = {
     }
   },
   answers: {
+    findAll1: (questionId) => {
+      return db.connect()
+      .then(client => {
+        return client.query(`
+        SELECT id, body, date, answerer_name, helpfulness 
+        FROM answers 
+        WHERE question_id = ${questionId}
+      `)
+      .then(({rows}) => {
+        client.release();
+        return rows;
+      })
+      .catch(e => {
+        client.release();
+        console.error(e);
+      })
+    .catch(e => console.error(e))
+    });
+    },
+    findAnswerPhotos: (answerId) => {
+      const text = 'SELECT url FROM answers_photos WHERE answer_id = $1';
+      const values = [answerId];
+      return db.connect()
+      .then(client => {
+        return client.query(text, values)
+        .then(({rows}) => {
+          client.release();
+          return rows;
+        })
+        .catch(e => {
+          client.release();
+          console.error(e);
+        })
+      })
+      
+    },
     findAll: (questionId, count, page) => {
       return db.connect()
       .then(client => {
