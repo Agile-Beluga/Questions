@@ -7,12 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server/index.js",
     "start-dev": "nodemon server/index.js",
-    "schema": "node db/schema.sql",
-    "import-data": "node ETL/index.js"
+    "create-schema": "node db/schema.sql"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Agile-Beluga/Kartify-API-Questions.git"
+    "url": "https://github.com/Agile-Beluga/Kartify-API-Questions.git"
   },
   "author": "Sebastian Coronel",
   "license": "MIT",
@@ -26,8 +25,10 @@
     "csv-parser": "^2.3.2",
     "express": "^4.17.1",
     "morgan": "^1.9.1",
-    "nodemon": "^2.0.2",
     "pg": "^7.17.0",
     "redis": "^2.8.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
   }
 }
