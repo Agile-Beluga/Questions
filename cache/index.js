@@ -9,7 +9,11 @@ const client = redis.createClient({
   port: 6379
 });
 
-client.on('connect', () => console.log('Connected to Redis'));
+client.on('connect', () => {
+  if (process.env.NODE_ENV !== 'test') {
+    console.log('Connected to Redis');
+  }
+});
 client.on('end', () => console.log('Disconnected from Redis'))
 client.on('error', e => console.error(e));
 
