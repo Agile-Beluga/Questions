@@ -32,3 +32,5 @@ CREATE TABLE IF NOT EXISTS answers_photos (
 CREATE INDEX questions_product_id ON questions(product_id);
 CREATE INDEX answers_question_id ON answers(question_id);
 CREATE INDEX answers_photos_answer_id ON answers_photos(answer_id);
+
+CREATE DATABASE kartify_test TEMPLATE kartify;
