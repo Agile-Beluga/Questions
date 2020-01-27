@@ -135,7 +135,7 @@ module.exports = {
       })
       .catch(e =>{
         res.sendStatus(500);
-        console.error(e);
+        if(process.env.NODE_ENV !== 'test') console.error(e);
       });
     },
     putHelpful: (req, res) => {
@@ -145,7 +145,7 @@ module.exports = {
       .then(() => res.sendStatus(204))
       .catch(e => {
         res.sendStatus(500);
-        console.error(e);
+        if(process.env.NODE_ENV !== 'test') console.error(e);
       });
     },
     putReport: (req, res) => {

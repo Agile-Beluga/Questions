@@ -5,9 +5,9 @@
   "main": "server/index.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test mocha --timeout 10000",
-    "start": "node server/index.js",
-    "start-dev": "nodemon server/index.js",
-    "create-schema": "node db/schema.sql"
+    "start": "cross-env NODE_ENV=prod node server/index.js",
+    "start-dev": "cross-env NODE_ENV=dev nodemon server/index.js",
+    "create-db": "node db/schema.sql"
   },
   "repository": {
     "type": "git",

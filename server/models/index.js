@@ -65,12 +65,7 @@ module.exports = {
       return (
         db.connect()
         .then(client => {
-          return client.query(query,values)
-          .then(() => client.release())
-          .catch(e => {
-            client.release();
-            console.error(e);
-          })
+          return client.query(query,values).finally(() => client.release())
         })
       );
     },
