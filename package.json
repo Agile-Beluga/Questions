@@ -4,7 +4,7 @@
   "description": "Questions API for Kartify app",
   "main": "server/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --timeout 10000",
     "start": "node server/index.js",
     "start-dev": "nodemon server/index.js",
     "create-schema": "node db/schema.sql"
@@ -13,7 +13,7 @@
     "type": "git",
     "url": "https://github.com/Agile-Beluga/Kartify-API-Questions.git"
   },
-  "author": "Sebastian Coronel",
+  "author": "Sebastian Coronel Hamilton",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Agile-Beluga/Kartify-API-Questions/issues"
@@ -22,16 +22,17 @@
   "dependencies": {
     "bluebird": "^3.7.2",
     "body-parser": "^1.19.0",
-    "chai": "^4.2.0",
     "csv-parser": "^2.3.2",
     "express": "^4.17.1",
-    "mocha": "^7.0.1",
     "morgan": "^1.9.1",
     "pg": "^7.17.0",
-    "redis": "^2.8.0",
-    "supertest": "^4.0.2"
+    "redis": "^2.8.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.2",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "mocha": "^7.0.1",
+    "supertest": "^4.0.2"
   }
 }

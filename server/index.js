@@ -6,6 +6,7 @@ const cache = require('../cache/index.js');
 const router = require('./routes/routes.js');
 
 const app = express();
+const port = 80;
 
 // Middleware
 app.use(morgan('dev'));
@@ -13,7 +14,6 @@ app.use(bodyParser.json());
 app.use('/', router);
 
 // Initialization
-const port = 80;
 httpServer = require('http').createServer(app);
 httpServer.listen(port, (e) => {
   if (e) {
@@ -32,10 +32,15 @@ const shutdownGracefully = () => {
   console.log('Starting shutdown...');
   db.end()
   .then(() => console.log('PostgreSQL pool disconnected'))
-  .catch(e => console.error('Error while disconnecting PostgreSQL pool'));
+  .catch(e => {
+    console.error('Error while disconnecting PostgreSQL pool');
+    console.error(e);
+  });
   cache.quit();
   httpServer.close(() => console.log('Server shut down'));
 };
 
 process.on('SIGINT', shutdownGracefully);
 process.on('SIGTERM', shutdownGracefully);
+
+module.exports = app;
