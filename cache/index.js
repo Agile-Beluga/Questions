@@ -5,7 +5,7 @@ promisifyAll(redis.RedisClient.prototype);
 promisifyAll(redis.Multi.prototype);
 
 const client = redis.createClient({
-  host: process.env.REDISHOST || 'localhost',
+  host: process.env.REDIS_HOST || 'localhost',
   port: 6379
 });
 

@@ -40,8 +40,31 @@ exports.add = (questionId, answer) => {
     .then(({ rows }) => rows[0].id)
     .catch(err => { throw new Error(err) })
     .finally(() => client.release())
-  })
-  .catch(err => { throw new Error(err) })
+  });
+};
+
+exports.addPhotos = (answerId, photos) => {
+  const parsedPhotos = photos.map((p) => `'${p}'`).join(',');
+  const columns = 'answer_id, url';
+  const query = `
+    DO
+    $do$
+    DECLARE
+      photo text;
+      photos text[] := array[${parsedPhotos}];
+    BEGIN 
+      FOREACH photo IN ARRAY photos
+      LOOP
+        INSERT INTO answers_photos (${columns}) VALUES (${answerId}, photo);
+      END LOOP;
+    END
+    $do$`;
+
+  return db.connect()
+  .then(client => {
+    return client.query(query)
+    .finally(() => client.release())
+  });
 };
 
 exports.markHelpful = (answerId) => {
