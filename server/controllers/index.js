@@ -1,5 +1,6 @@
 const models = require('../models/index.js');
 const cache = require('../../cache/commands.js');
+const answers = require('../../db/models/answers.js');
 
 module.exports = {
   questions: {
@@ -171,7 +172,7 @@ module.exports = {
         count: count,
         results: []
       };
-      models.answers.findAll(id, count, page)
+      answers.findAll(id, count, page)
       .then(answers => {
         if (answers) response.results = answers;
         res.json(response);
@@ -184,9 +185,9 @@ module.exports = {
     post: (req, res) => {
       const id = parseInt(req.params.question_id);
       const answer = req.body;
-
-      models.answers.add(id, answer)
-      .then(({rows}) => models.answers.addPhotos(rows[0].id, answer.photos))
+      
+      answers.add(id, answer)
+      .then(answerId => models.answers.addPhotos(answerId, answer.photos))
       .then(() => res.sendStatus(201))
       .catch(e => {
         res.sendStatus(500);
@@ -196,14 +197,14 @@ module.exports = {
     putHelpful: (req, res) => {
       const id = req.params.answer_id;
 
-      models.answers.markAsHelpful(id)
+      answers.markHelpful(id)
       .then(() => res.sendStatus(204))
       .catch(e => console.error(e));
     },
     putReport: (req, res) => {
       const id = parseInt(req.params.answer_id);
 
-      models.answers.report(id)
+      answers.report(id)
       .then(() => res.sendStatus(204))
       .catch(e => {
         res.sendStatus(500);
