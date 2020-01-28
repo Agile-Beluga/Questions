@@ -16,31 +16,34 @@ __Tech Stack:__
 * [Endpoints](#endpoints)
 * [Getting Started](#getting-started)
 
-### Endpoints
-#### Questions
-__Get list of questions__
+## Endpoints
+
+### Questions
+
+#### Get list of questions
   `GET /qa/:product_id`
 
-__Add a question__
+#### Add a question
   `POST /qa/:product_id`
 
-__Mark question as helpful__
+####  Mark question as helpful
   `PUT /qa/question/:question_id/helpful`
 
-__Report question__ 
+#### Report question
   `PUT /qa/question/:question_id/report`
 
-#### Answers
-__Get list of answers__
+### Answers
+
+#### Get list of answers
   `GET /qa/:question_id/answers`
 
-__Add an answer__
+#### Add an answer
   `POST /qa/:question_id/answers`
 
-__Mark answers as helpful__
+#### Mark answers as helpful
   `PUT /qa/answer/:answer_id/helpful`
 
-__Report answer__ 
+#### Report answer
   `PUT /qa/answer/:answer_id/report`
 
-### Getting Started
+## Getting Started
