@@ -1,5 +1,7 @@
-# Agile Beluga Questions & Answers API
+# Shop.ly API - Questions & Answers
 
+## Overview
+The Shop.ly API is a back-end system for an e-commerce platform. It is designed for efficiency and scalability, with the ability to handle a high volume of traffic. It currently serves more than a million records related to product's questions and answers.
 
 __Tech Stack:__ 
 * Node.js
@@ -10,7 +12,7 @@ __Tech Stack:__
 * AWS
 * Mocha/Chai
 
-### Table of Contents
+## Table of Contents
 * [Endpoints](#endpoints)
 * [Getting Started](#getting-started)
 
